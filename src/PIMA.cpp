@@ -28,9 +28,12 @@ int PIMAclass::loop()
     if (currentMillis - previousMillis >= interval)
     {
       previousMillis = currentMillis;
-      Serial.print("[PIMA] ");
-      Serial.print(payload_len);
-      Serial.println(" millis");
+      if (debug)
+      {
+        Serial.print("[PIMA] ");
+        Serial.print(payload_len);
+        Serial.println(" millis");
+      }
       clear();
     }
   }
@@ -54,8 +57,12 @@ int PIMAclass::processPIMA()
     if (payload_buf[0] != b)
     {
       clear();
-      Serial.print("[PIMA_PREAMBLE] ");
-      Serial.println(payload_buf[0], HEX);
+      if (debug)
+      {
+        Serial.print("[PIMA] ");
+        Serial.print(payload_buf[0], HEX);
+        Serial.println(" Preable error");
+      }
       return 0;
     }
   }
@@ -65,9 +72,12 @@ int PIMAclass::processPIMA()
     if (preamble != PIMA_PREAMBLE)
     {
       clear();
-      Serial.print("[PIMA] ");
-      Serial.print(preamble, HEX);
-      Serial.println(" Preable error");
+      if (debug)
+      {
+        Serial.print("[PIMA] ");
+        Serial.print(preamble, HEX);
+        Serial.println(" Preable error");
+      }
       return 0;
     }
   }
@@ -77,8 +87,11 @@ int PIMAclass::processPIMA()
     if (pima_size > 10)
     {
       clear();
-      Serial.print("[PIMA] ");
-      Serial.println("pima_size");
+      if (debug)
+      {
+        Serial.print("[PIMA] ");
+        Serial.println("pima_size");
+      }
       return 0;
     }
   }
@@ -90,8 +103,11 @@ int PIMAclass::processPIMA()
     if (crc != calc_crc)
     {
       clear();
-      Serial.print("[PIMA] ");
-      Serial.println("CRC error");
+      if (debug)
+      {
+        Serial.print("[PIMA] ");
+        Serial.println("CRC error");
+      }
       return 0;
     }
 
@@ -102,11 +118,6 @@ int PIMAclass::processPIMA()
     if (messageCallback)
     {
       messageCallback(pima);
-    }
-
-    if (messageCallback2)
-    {
-      messageCallback2(pima.id, pima.index, pima.value);
     }
 
     clear();
@@ -122,13 +133,14 @@ void PIMAclass::onMessage(void (*cb)(PIMALayer pima))
   messageCallback = cb;
 }
 
-void PIMAclass::onMessage2(void (*cb)(uint32_t id, uint16_t index, uint32_t value))
-{
-  messageCallback2 = cb;
-}
-
 void PIMAclass::clear()
 {
+  /*
+  for (size_t i = 0; i < payload_len; i++)
+  {
+    Serial.println(payload_buf[i], HEX); 
+  }
+  */
   pima_size = 0;
   payload_len = 0;
 }
