@@ -21,12 +21,26 @@ void PIMAclass::begin(Stream *_stream)
 
 int PIMAclass::loop()
 {
-  while (available())
+  unsigned long interval = 500;
+  unsigned long currentMillis = millis();
+  if (payload_len != 0)
   {
-    write(read());
-    if (processPIMA())
+    if (currentMillis - previousMillis >= interval)
     {
-      //return true;
+      previousMillis = currentMillis;
+      Serial.print("[PIMA] ");
+      Serial.print(payload_len);
+      Serial.println(" millis");
+      clear();
+    }
+  }
+
+  if (stream != nullptr)
+  {
+    while (available() > 0)
+    {
+      previousMillis = currentMillis;
+      write(read());
     }
   }
   return 0;
@@ -40,7 +54,7 @@ int PIMAclass::processPIMA()
     if (payload_buf[0] != b)
     {
       clear();
-      Serial.print("[PIMA] ");
+      Serial.print("[PIMA_PREAMBLE] ");
       Serial.println(payload_buf[0], HEX);
       return 0;
     }
@@ -63,6 +77,8 @@ int PIMAclass::processPIMA()
     if (pima_size > 10)
     {
       clear();
+      Serial.print("[PIMA] ");
+      Serial.println("pima_size");
       return 0;
     }
   }
@@ -78,8 +94,6 @@ int PIMAclass::processPIMA()
       Serial.println("CRC error");
       return 0;
     }
-
-    //PIMALayer pima;
 
     pima.id = bcd2number(payload_buf + 2, 5);
     pima.index = *((uint16_t *)(payload_buf + 8));
@@ -122,6 +136,7 @@ void PIMAclass::clear()
 size_t PIMAclass::write(uint8_t c)
 {
   payload_buf[payload_len++] = c;
+  processPIMA();
   return 1;
 };
 

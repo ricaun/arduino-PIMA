@@ -9,10 +9,10 @@
 
 #define PIMA_PREAMBLE 0x55AA
 
-#define PIMA_INDEX_ACTIVE 0x020A
-#define PIMA_INDEX_INDUCTIVE 0x070A
+#define PIMA_INDEX_ACTIVE     0x020A
+#define PIMA_INDEX_INDUCTIVE  0x070A
 #define PIMA_INDEX_CAPACITIVE 0x0C0A
-#define PIMA_INDEX_REVERSE 0x510A
+#define PIMA_INDEX_REVERSE    0x510A
 
 typedef struct
 {
@@ -34,7 +34,9 @@ private:
   PIMALayer pima;
   uint8_t pima_size = 0;
 
-  Stream *stream;
+  unsigned long previousMillis = 0;
+
+  Stream *stream = nullptr;
 
 public:
 
