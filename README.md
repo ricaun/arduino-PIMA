@@ -3,7 +3,7 @@
 The Unidirectional Asynchronous Serial Output is a protocol to
 communication with electronic electricity meters. 
 
-[![Build Status](https://travis-ci.org/ricaun/arduino-PIMA.svg?branch=master)](https://travis-ci.org/ricaun/arduino-PIMA)
+![LibraryBuild](https://github.com/ricaun/arduino-PIMA/workflows/LibraryBuild/badge.svg?branch=master)
 
 ## Diagram
 
