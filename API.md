@@ -45,9 +45,9 @@ void pimaMessage(PIMALayer pima)
 Write data to the decoder.
 
 ```arduino
-LoRa.write(byte);
+PIMA.write(byte);
 
-LoRa.write(buffer, length);
+PIMA.write(buffer, length);
 ```
 * `byte` - single byte to write to packet
 
