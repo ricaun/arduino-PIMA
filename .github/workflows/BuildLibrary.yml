@@ -40,7 +40,7 @@ jobs:
         #############################################################################################################
         include:
           - arduino-boards-fqbn: arduino:avr:uno
-            examples-exclude: PIMA-Serial1-index, PIMA-Serial1
+            sketches-exclude: PIMA-Serial1-index, PIMA-Serial1
 
           - arduino-boards-fqbn: arduino:avr:mega
           
@@ -60,4 +60,4 @@ jobs:
           arduino-board-fqbn: ${{ matrix.arduino-boards-fqbn }}
           platform-url: ${{ matrix.platform-url }}
           required-libraries: ${{ env.REQUIRED_LIBRARIES }}
-          examples-exclude: ${{ matrix.examples-exclude }}
+          sketches-exclude: ${{ matrix.sketches-exclude }}
